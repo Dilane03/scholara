@@ -16,8 +16,16 @@ const post = (data: unknown): RequestInit => ({ method: 'POST', headers: { 'Cont
 export const schoolApi = {
   getOverview: () => request('/dashboard/overview', { stats, classes, activities, schedule, feeStatus }),
   getStudents: () => request('/students', students),
-  createPreEnrollment: (data: unknown) => request('/students/pre-enrollments', { id: 'CEH-26-00501' }, post(data)),
+  createPreEnrollment: (data: { matricule?: string }) => request<{ id: string }>('/students/pre-enrollments', { id: data.matricule || `CEH-26-${String(Date.now()).slice(-5)}` }, post(data)),
+  importStudents: (data: { name: string; className: string; stream: string; guardian: string; phone: string }[]) => request<{ students: (typeof students)[number][] }>('/students/import', { students: data.map((row, index) => ({ ...row, id: `CEH-26-${String(Date.now() + index).slice(-5)}`, status: 'Actif', fees: '—' })) }, post({ students: data })),
   getClasses: () => request('/classes', classes),
+  createClass: (data: { name: string; stream: string; capacity: number; teacher: string }) => request('/classes', { saved: true }, post(data)),
+  createSubject: (data: { name: string; stream: string }) => request('/subjects', { saved: true }, post(data)),
+  createTeacherAssignment: (data: { teacher: string; subject: string; className: string }) => request('/classes/teacher-assignments', { saved: true }, post(data)),
+  assignStudent: (data: unknown) => request('/classes/assignments', { assigned: true }, post(data)),
+  createAssignmentRequest: (data: unknown) => request<{ id: string }>('/classes/assignment-exceptions', { id: `DER-26-${String(Date.now()).slice(-4)}` }, post(data)),
+  updateAssignmentRequest: (id: string, status: 'Acceptée' | 'Refusée') => request('/classes/assignment-exceptions', { id, status }, post({ id, status })),
+
   getAttendance: () => request('/attendance/today', attendanceRoster),
   submitAttendance: (data: unknown) => request('/attendance', { saved: true }, post(data)),
   getGrades: () => request('/grades', evaluations),

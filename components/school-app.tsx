@@ -6,6 +6,8 @@ import { activities, announcements, attendanceRoster, classes, evaluations, feeS
 import { sectionLabels, translations } from '@/mocks/translations'
 import { schoolApi } from '@/lib/api'
 import { ConfirmDialog, DataTable, EmptyState, FormStepper, StatCard, StatusBadge } from '@/components/school-ui'
+import { StudentRecords } from '@/components/student-records'
+import { SchoolStructure } from '@/components/school-structure'
 
 const navIcons: Record<Section, React.ElementType> = { overview: LayoutDashboard, students: Users, classes: GraduationCap, attendance: CalendarCheck, grades: BookOpenCheck, bulletins: FileText, finance: Wallet, communication: Megaphone, resources: BookOpen, documents: ClipboardList, users: ShieldCheck, audit: Activity, settings: Settings }
 const roles: SchoolRole[] = ['principal','censor','secretary','accountant','head_teacher','teacher','department_head','parent','student','super_admin']
@@ -72,8 +74,8 @@ export function SchoolApp() {
 
   const renderSection = () => {
     if (active === 'overview') return renderDashboard()
-    if (active === 'students') return <StudentsSection t={t} language={language} role={role} onNew={() => { setNewEnrollment(true); setStep(0) }} onExport={exportCsv} search={search} setSearch={setSearch} rows={searchedStudents.slice((page-1)*5,page*5)} page={page} setPage={setPage} notify={notify}/>
-    if (active === 'classes') return <StructureSection t={t} role={role} notify={notify}/>
+    if (active === 'students') return <StudentRecords t={t} language={language} role={role} search={search} setSearch={setSearch} notify={notify}/>
+    if (active === 'classes') return <SchoolStructure t={t} role={role} language={language} notify={notify}/>
     if (active === 'attendance') return role === 'parent' ? <ParentAttendance t={t} notify={notify}/> : <AttendanceSection t={t} attendance={attendance} setAttendance={setAttendance} onSave={()=>setDialog('attendance')}/>
     if (active === 'grades') return <GradesSection t={t} values={gradeValues} setValues={setGradeValues} onSave={()=>setDialog('grade')} role={role}/>
     if (active === 'finance') return <FinanceSection t={t} role={role} onPayment={()=>setPaymentOpen(true)} notify={notify}/>

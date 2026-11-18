@@ -34,7 +34,7 @@ export const classes = [
   { name: '2nde C', stream: 'Second cycle · Général', students: 35, capacity: 40, teacher: 'Mme Mireille Nguemo', attendance: 94, color: 'violet' },
   { name: '1ère D', stream: 'Second cycle · Général', students: 32, capacity: 36, teacher: 'M. Alain Fotso', attendance: 89, color: 'amber' },
   { name: 'Tle F3', stream: 'Technique · Électrotechnique', students: 27, capacity: 30, teacher: 'M. Patrick Mbarga', attendance: 92, color: 'teal' },
-  { name: '2nde G1', stream: 'Technique · Comptabilité', students: 31, capacity: 32, teacher: 'Mme Odette Fokam', attendance: 90, color: 'blue' },
+  { name: '2nde G1', stream: 'Technique · Comptabilité', students: 32, capacity: 32, teacher: 'Mme Odette Fokam', attendance: 90, color: 'blue' },
 ]
 
 export const students = [
