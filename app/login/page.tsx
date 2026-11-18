@@ -1,0 +1,19 @@
+'use client'
+
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { ArrowLeft, ArrowRight, Eye, EyeOff, GraduationCap, LockKeyhole } from 'lucide-react'
+import { translations } from '@/mocks/translations'
+import type { Language } from '@/mocks/school'
+
+export default function LoginPage() {
+  const [language, setLanguage] = useState<Language>('fr')
+  const [student, setStudent] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const t = translations[language]
+  const router = useRouter()
+  return <main className="auth-page"><section className="auth-aside"><Link className="auth-brand" href="/"><span className="brand-mark"><GraduationCap size={22}/></span><span>Campus<small>GESTION SCOLAIRE</small></span></Link><div className="auth-aside-copy"><span className="auth-kicker">COLLÈGE LES HORIZONS</span><h1>{language==='fr'?'La réussite scolaire, en toute confiance.':'School success, built on trust.'}</h1><p>{language==='fr'?'Un espace simple et sécurisé pour accompagner chaque élève, chaque famille et chaque équipe éducative.':'A simple, secure space for every student, family and educator.'}</p><div className="auth-aside-note"><LockKeyhole size={17}/><span>{language==='fr'?'Vos données scolaires restent confidentielles.':'Your school data stays private.'}</span></div></div><span className="auth-aside-footer">Yaoundé · Cameroun · 2025–2026</span></section><section className="auth-main"><div className="auth-top"><Link href="/public" className="auth-back"><ArrowLeft size={15}/>{t.publicSite}</Link><button className="language-button" onClick={()=>setLanguage(language==='fr'?'en':'fr')}>{language.toUpperCase()}</button></div><div className="auth-card"><div className="auth-mobile-brand"><div className="brand-mark"><GraduationCap size={22}/></div><span>Campus</span></div><span className="auth-kicker">{language==='fr'?'ESPACE SCOLAIRE':'SCHOOL PORTAL'}</span><h2>{t.loginTitle}</h2><p>{t.loginSubtitle}</p><div className="login-type" role="group" aria-label={language==='fr'?'Type de compte':'Account type'}><button className={!student?'active':''} aria-pressed={!student} onClick={()=>setStudent(false)}>{language==='fr'?'Personnel / parent':'Staff / parent'}</button><button className={student?'active':''} aria-pressed={student} onClick={()=>setStudent(true)}>{language==='fr'?'Élève':'Student'}</button></div><form className="auth-form" onSubmit={(event)=>{event.preventDefault();setError('');setBusy(true);window.setTimeout(()=>{setBusy(false);router.push('/')},350)}}><label>{student?t.matriculeLogin:t.identifier}<input required type={student?'text':'email'} autoComplete="username" placeholder={student?'CEH-25-00418':'nom@exemple.cm'}/></label><label>{t.password}<span className="password-field"><input required minLength={8} type={showPassword?'text':'password'} autoComplete="current-password" placeholder="••••••••"/><button type="button" aria-label={showPassword?'Masquer le mot de passe':'Afficher le mot de passe'} onClick={()=>setShowPassword(!showPassword)}>{showPassword?<EyeOff size={16}/>:<Eye size={16}/>}</button></span></label><div className="auth-form-row"><label className="auth-checkbox"><input type="checkbox"/>{t.remember}</label><Link href="/forgot-password">{t.forgotPassword}</Link></div>{error&&<p className="auth-error" role="alert">{error}</p>}<button className="auth-submit" type="submit" disabled={busy}>{busy?'…':t.signIn}<ArrowRight size={16}/></button></form><div className="auth-demo-hint">{t.demoHint}</div><div className="auth-activation"><span>{t.noAccount}</span><Link href="/activate">{t.activate}<ArrowRight size={14}/></Link></div><div className="auth-footer"><span>© 2025 Campus</span><span>Secrétariat · +237 222 31 45 67</span></div></div></section></main>
+}
