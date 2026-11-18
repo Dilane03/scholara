@@ -1,0 +1,26 @@
+export const translations = {
+  fr: {
+    appName: 'Campus', overview: 'Vue d’ensemble', students: 'Élèves', classes: 'Classes', attendance: 'Présences', grades: 'Notes & évaluations', finance: 'Finances', communication: 'Communication', reports: 'Rapports', settings: 'Paramètres',
+    school: 'Établissement', academicYear: 'Année scolaire', search: 'Rechercher un élève, une classe…', welcome: 'Bonjour, Mme Ngo Meka', welcomeSub: 'Voici ce qui se passe dans votre établissement aujourd’hui.',
+    studentsEnrolled: 'Élèves inscrits', attendanceRate: 'Taux de présence', gradesPending: 'Notes en attente', collectionsMonth: 'Encaissements',
+    enrolled: 'inscrits', pendingReview: 'À valider', vsLastMonth: 'vs mois dernier', thisMonth: 'ce mois',
+    classesOverview: 'Effectifs par classe', seeAll: 'Voir toutes', studentsCount: 'élèves', attendanceShort: 'Présence', recentActivity: 'Activité récente', thisWeek: 'Cette semaine',
+    todaySchedule: 'Aujourd’hui dans l’établissement', scheduleSub: 'Mardi 18 novembre · Trimestre 1', viewTimetable: 'Voir l’emploi du temps',
+    financeOverview: 'Suivi des frais de scolarité', financeSub: 'Situation des paiements · Année 2025–2026', paid: 'À jour', partial: 'Partiel', overdue: 'En retard', totalCollected: 'Total encaissé',
+    allNotifications: 'Tout marquer comme lu', notifications: 'Notifications', profile: 'Mon profil', help: 'Aide & support', logout: 'Déconnexion', role: 'Rôle actif', language: 'Langue', theme: 'Thème clair/sombre',
+    quickAccess: 'Accès rapide', addStudent: 'Inscrire un élève', recordPayment: 'Enregistrer un paiement', validateGrades: 'Valider les notes', makeAnnouncement: 'Publier une annonce',
+    days: 'Mardi', collectionLabel: 'Recouvrement', seeDetails: 'Voir le détail', presentToday: 'Présents aujourd’hui', pendingItems: 'Éléments à traiter',
+  },
+  en: {
+    appName: 'Campus', overview: 'Overview', students: 'Students', classes: 'Classes', attendance: 'Attendance', grades: 'Grades & assessments', finance: 'Finance', communication: 'Communication', reports: 'Reports', settings: 'Settings',
+    school: 'School', academicYear: 'Academic year', search: 'Search a student, class…', welcome: 'Good morning, Mrs Ngo Meka', welcomeSub: 'Here’s what’s happening at your school today.',
+    studentsEnrolled: 'Enrolled students', attendanceRate: 'Attendance rate', gradesPending: 'Grades pending', collectionsMonth: 'Collections',
+    enrolled: 'enrolled', pendingReview: 'For review', vsLastMonth: 'vs last month', thisMonth: 'this month',
+    classesOverview: 'Students by class', seeAll: 'View all', studentsCount: 'students', attendanceShort: 'Attendance', recentActivity: 'Recent activity', thisWeek: 'This week',
+    todaySchedule: 'Today at school', scheduleSub: 'Tuesday, November 18 · Term 1', viewTimetable: 'View timetable',
+    financeOverview: 'Tuition fee tracking', financeSub: 'Payment status · 2025–2026 school year', paid: 'Up to date', partial: 'Partial', overdue: 'Overdue', totalCollected: 'Total collected',
+    allNotifications: 'Mark all as read', notifications: 'Notifications', profile: 'My profile', help: 'Help & support', logout: 'Sign out', role: 'Active role', language: 'Language', theme: 'Light/dark theme',
+    quickAccess: 'Quick access', addStudent: 'Enroll a student', recordPayment: 'Record a payment', validateGrades: 'Review grades', makeAnnouncement: 'Post an announcement',
+    days: 'Tuesday', collectionLabel: 'Collection', seeDetails: 'View details', presentToday: 'Present today', pendingItems: 'Items to review',
+  },
+} as const
