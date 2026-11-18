@@ -8,6 +8,7 @@ import { schoolApi } from '@/lib/api'
 import { ConfirmDialog, DataTable, EmptyState, FormStepper, StatCard, StatusBadge } from '@/components/school-ui'
 import { StudentRecords } from '@/components/student-records'
 import { SchoolStructure } from '@/components/school-structure'
+import { AttendanceWorkspace, GradesWorkspace } from '@/components/academic-workflows'
 
 const navIcons: Record<Section, React.ElementType> = { overview: LayoutDashboard, students: Users, classes: GraduationCap, attendance: CalendarCheck, grades: BookOpenCheck, bulletins: FileText, finance: Wallet, communication: Megaphone, resources: BookOpen, documents: ClipboardList, users: ShieldCheck, audit: Activity, settings: Settings }
 const roles: SchoolRole[] = ['principal','censor','secretary','accountant','head_teacher','teacher','department_head','parent','student','super_admin']
@@ -20,7 +21,7 @@ export function SchoolApp() {
   const [role, setRole] = useState<SchoolRole>('principal')
   const [language, setLanguage] = useState<Language>('fr')
   const [dark, setDark] = useState(false)
-  const [isOnline, setIsOnline] = useState(true)
+  const [isOnline, setIsOnline] = useState(false)
   const [active, setActive] = useState<Section>('overview')
   const [mobileMenu, setMobileMenu] = useState(false)
   const [search, setSearch] = useState('')
@@ -76,8 +77,8 @@ export function SchoolApp() {
     if (active === 'overview') return renderDashboard()
     if (active === 'students') return <StudentRecords t={t} language={language} role={role} search={search} setSearch={setSearch} notify={notify}/>
     if (active === 'classes') return <SchoolStructure t={t} role={role} language={language} notify={notify}/>
-    if (active === 'attendance') return role === 'parent' ? <ParentAttendance t={t} notify={notify}/> : <AttendanceSection t={t} attendance={attendance} setAttendance={setAttendance} onSave={()=>setDialog('attendance')}/>
-    if (active === 'grades') return <GradesSection t={t} values={gradeValues} setValues={setGradeValues} onSave={()=>setDialog('grade')} role={role}/>
+    if (active === 'attendance') return <AttendanceWorkspace language={language} role={role}/>
+    if (active === 'grades') return <GradesWorkspace language={language} role={role}/>
     if (active === 'finance') return <FinanceSection t={t} role={role} onPayment={()=>setPaymentOpen(true)} notify={notify}/>
     if (active === 'communication') return <AnnouncementsSection t={t} role={role} open={announcementOpen} setOpen={setAnnouncementOpen} notify={notify}/>
     if (active === 'resources') return <ResourcesSection t={t} role={role} notify={notify}/>
