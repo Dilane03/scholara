@@ -9,6 +9,7 @@ import { ConfirmDialog, DataTable, EmptyState, FormStepper, StatCard, StatusBadg
 import { StudentRecords } from '@/components/student-records'
 import { SchoolStructure } from '@/components/school-structure'
 import { AttendanceWorkspace, GradesWorkspace } from '@/components/academic-workflows'
+import { BulletinModule, CommunicationModule, FinanceModule, ResourcesModule } from '@/components/school-advanced-sections'
 
 const navIcons: Record<Section, React.ElementType> = { overview: LayoutDashboard, students: Users, classes: GraduationCap, attendance: CalendarCheck, grades: BookOpenCheck, bulletins: FileText, finance: Wallet, communication: Megaphone, resources: BookOpen, documents: ClipboardList, users: ShieldCheck, audit: Activity, settings: Settings }
 const roles: SchoolRole[] = ['principal','censor','secretary','accountant','head_teacher','teacher','department_head','parent','student','super_admin']
@@ -79,10 +80,10 @@ export function SchoolApp() {
     if (active === 'classes') return <SchoolStructure t={t} role={role} language={language} notify={notify}/>
     if (active === 'attendance') return <AttendanceWorkspace language={language} role={role}/>
     if (active === 'grades') return <GradesWorkspace language={language} role={role}/>
-    if (active === 'finance') return <FinanceSection t={t} role={role} onPayment={()=>setPaymentOpen(true)} notify={notify}/>
-    if (active === 'communication') return <AnnouncementsSection t={t} role={role} open={announcementOpen} setOpen={setAnnouncementOpen} notify={notify}/>
-    if (active === 'resources') return <ResourcesSection t={t} role={role} notify={notify}/>
-    if (active === 'bulletins') return <BulletinsSection t={t} role={role} onPublish={()=>setDialog('bulletin')} notify={notify}/>
+    if (active === 'finance') return <FinanceModule role={role} language={language} notify={notify} onPayment={()=>setPaymentOpen(true)}/>
+    if (active === 'communication') return <CommunicationModule role={role} language={language} notify={notify} onNewAnnouncement={()=>setAnnouncementOpen(true)}/>
+    if (active === 'resources') return <ResourcesModule role={role} language={language} notify={notify}/>
+    if (active === 'bulletins') return <BulletinModule role={role} language={language} notify={notify} child={child}/>
     if (active === 'documents') return <DocumentsSection t={t} notify={notify}/>
     if (active === 'users') return <UsersSection t={t}/>
     if (active === 'audit') return <AuditSection t={t}/>
