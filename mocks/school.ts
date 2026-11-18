@@ -1,6 +1,9 @@
 export type SchoolRole = 'super_admin' | 'principal' | 'censor' | 'secretary' | 'accountant' | 'head_teacher' | 'teacher' | 'department_head' | 'parent' | 'student'
 export type Language = 'fr' | 'en'
 export type Section = 'overview' | 'students' | 'classes' | 'attendance' | 'grades' | 'bulletins' | 'finance' | 'communication' | 'resources' | 'documents' | 'users' | 'audit' | 'settings'
+export type EducationSector = 'general' | 'technical'
+
+export const isTechnicalEducation = (value: string) => /technique|électro|electro|comptabilité|comptabilite|industriel/i.test(value)
 
 export const school = { name: 'Collège Les Horizons', location: 'Yaoundé, Cameroun', year: '2025–2026', initials: 'CH' }
 

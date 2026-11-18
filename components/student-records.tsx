@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import readXlsxFile from 'read-excel-file/browser'
 import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Download, FileSpreadsheet, FileText, LockKeyhole, Search, Upload, UserRound, X } from 'lucide-react'
-import { classes, evaluations, students, type Language, type SchoolRole } from '@/mocks/school'
+import { classes, evaluations, isTechnicalEducation, students, type EducationSector, type Language, type SchoolRole } from '@/mocks/school'
 import { translations } from '@/mocks/translations'
 import { schoolApi } from '@/lib/api'
 import { FormStepper, StatCard, StatusBadge, EmptyState } from '@/components/school-ui'
@@ -42,7 +42,7 @@ function parseCsv(text: string): unknown[][] {
   return rows
 }
 
-export function StudentRecords({ t, language, role, search, setSearch, notify }: { t: Copy; language: Language; role: SchoolRole; search: string; setSearch: (value: string) => void; notify: (message: string) => void }) {
+export function StudentRecords({ t, language, role, sector, search, setSearch, notify }: { t: Copy; language: Language; role: SchoolRole; sector: EducationSector; search: string; setSearch: (value: string) => void; notify: (message: string) => void }) {
   const [records, setRecords] = useState<Student[]>(students)
   const [classFilter, setClassFilter] = useState('')
   const [streamFilter, setStreamFilter] = useState('')
@@ -53,8 +53,9 @@ export function StudentRecords({ t, language, role, search, setSearch, notify }:
   const [importOpen, setImportOpen] = useState(false)
   const filtered = useMemo(() => records.filter((student) => {
     const matchesQuery = `${student.name} ${student.id} ${student.className} ${student.guardian} ${student.phone}`.toLowerCase().includes(search.trim().toLowerCase())
-    return matchesQuery && (!classFilter || student.className === classFilter) && (!streamFilter || student.stream === streamFilter) && (!statusFilter || student.status === statusFilter)
-  }), [records, search, classFilter, streamFilter, statusFilter])
+    const matchesSector = isTechnicalEducation(student.stream) === (sector === 'technical')
+    return matchesSector && matchesQuery && (!classFilter || student.className === classFilter) && (!streamFilter || student.stream === streamFilter) && (!statusFilter || student.status === statusFilter)
+  }), [records, search, classFilter, streamFilter, statusFilter, sector])
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize))
   const visible = filtered.slice((page - 1) * pageSize, page * pageSize)
   useEffect(() => { setPage(1) }, [search, classFilter, streamFilter, statusFilter])
@@ -76,12 +77,12 @@ export function StudentRecords({ t, language, role, search, setSearch, notify }:
   }
 
   return <>
-    <div className="stats-grid compact-stats"><StatCard label={t.studentsEnrolled} value="1 248" detail="+42 ce trimestre" tone="navy" icon={UserRound}/><StatCard label={t.enrollmentReview} value="24" detail="Nécessite une vérification" tone="amber" icon={FileText}/><StatCard label={t.incompleteFiles} value="17" detail="Documents manquants" tone="teal" icon={FileSpreadsheet}/><StatCard label={t.pendingAssignments} value="5" detail="Demandes en cours" tone="green" icon={LockKeyhole}/></div>
+    <div className="stats-grid compact-stats"><StatCard label={t.studentsEnrolled} value={String(records.filter((student) => isTechnicalEducation(student.stream) === (sector === 'technical')).length)} detail={language === 'fr' ? (sector === 'technical' ? 'Filière technique sélectionnée' : 'Filière générale sélectionnée') : (sector === 'technical' ? 'Technical education selected' : 'General education selected')} tone="navy" icon={UserRound}/><StatCard label={t.enrollmentReview} value="24" detail="Nécessite une vérification" tone="amber" icon={FileText}/><StatCard label={t.incompleteFiles} value="17" detail="Documents manquants" tone="teal" icon={FileSpreadsheet}/><StatCard label={t.pendingAssignments} value="5" detail="Demandes en cours" tone="green" icon={LockKeyhole}/></div>
     <section className="panel student-records-panel">
       <div className="panel-heading"><div><h2>{t.studentList}</h2><p>{language === 'fr' ? 'Dossiers de l’année scolaire active' : 'Student files for the active school year'}</p></div><div className="table-actions">{['secretary', 'principal', 'super_admin'].includes(role) && <button className="button-secondary" onClick={() => setImportOpen(true)}><Upload data-icon="inline-start"/>{t.importExcel}</button>}{role === 'secretary' && <button className="button-primary" onClick={() => setEnrollmentOpen(true)}>{t.newEnrollment}</button>}</div></div>
       <div className="filter-row">
         <label className="table-search"><Search aria-hidden="true"/><input aria-label={t.search} placeholder={t.search} value={search} onChange={(event) => setSearch(event.target.value)}/></label>
-        <label><span className="sr-only">{t.classLabel}</span><select aria-label={t.classLabel} value={classFilter} onChange={(event) => setClassFilter(event.target.value)}><option value="">{t.classLabel} · {t.filters}</option>{classes.map((item) => <option key={item.name}>{item.name}</option>)}</select></label>
+        <label><span className="sr-only">{t.classLabel}</span><select aria-label={t.classLabel} value={classFilter} onChange={(event) => setClassFilter(event.target.value)}><option value="">{t.classLabel} · {t.filters}</option>{classes.filter((item) => isTechnicalEducation(item.stream) === (sector === 'technical')).map((item) => <option key={item.name}>{item.name}</option>)}</select></label>
         <label><span className="sr-only">{t.stream}</span><select aria-label={t.stream} value={streamFilter} onChange={(event) => setStreamFilter(event.target.value)}><option value="">{t.stream}</option>{Array.from(new Set(records.map((s) => s.stream))).map((stream) => <option key={stream}>{stream}</option>)}</select></label>
         <label><span className="sr-only">{t.status}</span><select aria-label={t.status} value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="">{t.status}</option>{Array.from(new Set(records.map((s) => s.status))).map((status) => <option key={status}>{status}</option>)}</select></label>
         <div className="table-actions"><button className="button-secondary" onClick={exportRecords}><Download/>{language === 'fr' ? 'Excel / CSV' : 'Excel / CSV'}</button><button className="button-secondary" onClick={() => window.print()}><FileText/>PDF</button></div>
